@@ -1,0 +1,71 @@
+// SPDX-License-Identifier: Proprietary
+// Copyright 2026-present Citi MLOps Plane. All rights reserved.
+
+import { apiUrl } from "@/lib/api-base";
+import { create } from "zustand";
+
+export const env = {
+  MODE: import.meta.env.MODE,
+  DEV: import.meta.env.DEV,
+  PROD: import.meta.env.PROD,
+  BASE_URL: import.meta.env.BASE_URL,
+} as const;
+
+// ── Platform / device type ──────────────────────────────────
+
+export type DeviceType = "mac" | "windows" | "linux" | string;
+
+interface PlatformState {
+  deviceType: DeviceType;
+  chatOnly: boolean;
+  fetched: boolean;
+  isChatOnly: () => boolean;
+}
+
+// Client-side platform detection as fallback when backend isn't ready yet.
+function detectLocalPlatform(): DeviceType {
+  if (typeof navigator === "undefined") return "linux";
+  const platform = navigator.platform.toLowerCase();
+  const ua = navigator.userAgent.toLowerCase();
+  if (platform.includes("mac") || ua.includes("mac")) return "mac";
+  if (platform.includes("win") || ua.includes("win")) return "windows";
+  return "linux";
+}
+
+const localDeviceType = detectLocalPlatform();
+
+// Legacy upstream sets `chatOnly` on macOS: Studio training/export are not
+// supported on Apple Silicon in their beta (Chat + Data Recipes only; MLX
+// training TBD) — see https://citi.com/docs/new/studio . This fork keeps
+// `chatOnly` off so Train stays available in the UI; capability still
+// depends on the local backend and GPU.
+export const usePlatformStore = create<PlatformState>()((_, get) => ({
+  deviceType: localDeviceType,
+  chatOnly: false,
+  fetched: false,
+  isChatOnly: () => get().chatOnly,
+}));
+
+export async function fetchDeviceType(): Promise<DeviceType> {
+  const { fetched } = usePlatformStore.getState();
+  if (fetched) return usePlatformStore.getState().deviceType;
+
+  try {
+    const res = await fetch(apiUrl("/api/health"));
+    if (res.ok) {
+      const data = (await res.json()) as { device_type?: string };
+      const deviceType = data.device_type ?? detectLocalPlatform();
+      const chatOnly = false;
+      usePlatformStore.setState({ deviceType, chatOnly, fetched: true });
+      return deviceType;
+    }
+  } catch {
+    // Backend not ready — still record device; keep fetched=false so a later
+    // call can retry /api/health.
+    const deviceType = detectLocalPlatform();
+    usePlatformStore.setState({ deviceType, chatOnly: false, fetched: false });
+    return deviceType;
+  }
+
+  return usePlatformStore.getState().deviceType;
+}

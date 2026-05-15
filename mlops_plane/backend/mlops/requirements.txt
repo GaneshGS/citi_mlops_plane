@@ -1,0 +1,19 @@
+# Citi MLOps Plane — Python dependencies.
+# Install on top of the existing Studio backend env:
+#   pip install -r studio/backend/mlops/requirements.txt
+
+# DB
+sqlalchemy[asyncio]>=2.0,<3.0
+asyncpg>=0.29,<1.0
+alembic>=1.13,<2.0
+
+# HTTP
+httpx>=0.27,<1.0
+
+# Cloud SDKs — only needed when S3_USE_DUMMY=0
+boto3>=1.34,<2.0
+
+# Already required by the legacy studio stack — listed for clarity.
+fastapi
+uvicorn[standard]
+pydantic>=2.6,<3.0
