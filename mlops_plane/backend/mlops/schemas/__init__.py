@@ -5,6 +5,7 @@
 
 from .experiment import (
     ExperimentCreate,
+    ExperimentDataSourceOut,
     ExperimentDetail,
     ExperimentEventOut,
     ExperimentOut,
@@ -25,6 +26,7 @@ from .finetune import (
 
 __all__ = [
     "ExperimentCreate",
+    "ExperimentDataSourceOut",
     "ExperimentDetail",
     "ExperimentEventOut",
     "ExperimentOut",

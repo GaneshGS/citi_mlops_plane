@@ -28,7 +28,6 @@ const CHAT_ONLY_ALLOWED = new Set([
 
 function isChatOnlyAllowed(pathname: string): boolean {
   if (CHAT_ONLY_ALLOWED.has(pathname)) return true;
-  if (pathname === "/data-recipes" || pathname.startsWith("/data-recipes/")) return true;
   // Citi MLOps Plane — recipes / experiments / prompts are all allowed.
   if (pathname === "/recipes" || pathname.startsWith("/recipes/")) return true;
   if (pathname === "/experiments" || pathname.startsWith("/experiments/")) return true;

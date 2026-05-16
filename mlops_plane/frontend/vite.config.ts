@@ -24,26 +24,6 @@ export default defineConfig({
         target: "http://127.0.0.1:8888",
         changeOrigin: true,
       },
-      "/seed/inspect": {
-        target: "http://127.0.0.1:8004",
-        changeOrigin: true,
-      },
-      "/seed/preview": {
-        target: "http://127.0.0.1:8004",
-        changeOrigin: true,
-      },
-      "/preview": {
-        target: "http://127.0.0.1:8004",
-        changeOrigin: true,
-      },
-      "/validate": {
-        target: "http://127.0.0.1:8004",
-        changeOrigin: true,
-      },
-      "/tools": {
-        target: "http://127.0.0.1:8004",
-        changeOrigin: true,
-      },
     },
   },
   resolve: {

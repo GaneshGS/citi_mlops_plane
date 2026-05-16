@@ -353,7 +353,7 @@ export function DatasetSection() {
   const handleOpenLearningRecipes = useCallback(() => {
     sessionStorage.setItem(OPEN_LEARNING_RECIPES_ON_ARRIVAL_KEY, "1");
     setDocumentRedirectOpen(false);
-    void navigate({ to: "/data-recipes" });
+    void navigate({ to: "/recipes" });
   }, [navigate]);
 
   return (
@@ -474,7 +474,7 @@ export function DatasetSection() {
                               </p>
                               {localDatasets.length === 0 ? (
                                 <Button asChild={true} size="sm" variant="outline">
-                                  <a href="/data-recipes">Open Data Recipes</a>
+                                  <a href="/recipes">Open Recipes</a>
                                 </Button>
                               ) : null}
                             </div>
