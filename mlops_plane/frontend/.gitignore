@@ -12,7 +12,8 @@ lerna-debug.log*
 
 node_modules
 bun.lock
-dist
+# dist is intentionally committed: git is the only way to ship the built
+# frontend to the locked-down VDI, where `npm install` fails.
 dist-ssr
 test/
 *.local

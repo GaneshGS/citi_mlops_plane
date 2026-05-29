@@ -19,6 +19,9 @@ studio/backend/assets/datasets/
 build/
 develop-eggs/
 dist/
+# Exception: the built frontend must be committed so it can reach the locked-down
+# VDI over git (the only transport there; `npm install` fails on the VDI).
+!mlops_plane/frontend/dist/
 downloads/
 eggs/
 .eggs/
